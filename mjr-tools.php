@@ -3,7 +3,7 @@
 Plugin Name: MJR Tools
 Plugin URI: http://www.major-themes.com/
 Description: Tools include Instagram, Twitter and other social network widgets, shortcodes and other useful WordPress stuff
-Version: 1.0.1
+Version: 1.0.2
 Author: Maxim Mamontov
 */
 
