@@ -3,7 +3,7 @@
 Plugin Name: MJR Tools
 Plugin URI: http://www.major-themes.com/
 Description: Tools include Instagram, Twitter and other social network widgets, shortcodes and other useful WordPress stuff
-Version: 1.0.3
+Version: 1.0.4
 Author: Major Themes
 Author URI: http://www.major-themes.com/
 */
@@ -432,7 +432,7 @@ function mjr_ready_widgets() {
 add_action( 'wp_enqueue_scripts', 'mjr_plugin_script_enqueuer' );
 function mjr_plugin_script_enqueuer() {
 	global $mjr_plugin_directory;
-	wp_register_script( 'mjr_plugin_main', $mjr_plugin_directory.'/js/main.js', array( 'jquery', 'jqueryui', 'thirdparty' ), '1.0.0', true );
+	wp_register_script( 'mjr_plugin_main', $mjr_plugin_directory.'/js/main.js', array( 'jquery', 'jqueryui' ), '1.0.0', true );
 	wp_enqueue_script( 'mjr_plugin_main' );
 }
 
