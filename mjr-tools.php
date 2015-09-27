@@ -3,7 +3,7 @@
 Plugin Name: MJR Tools
 Plugin URI: http://www.major-themes.com/
 Description: Tools include Instagram, Twitter and other social network widgets, shortcodes and other useful WordPress stuff
-Version: 1.0.4
+Version: 1.0.5
 Author: Major Themes
 Author URI: http://www.major-themes.com/
 */
@@ -14,9 +14,9 @@ class mjr_twitter_widget extends WP_Widget {
 
 	function mjr_twitter_widget() {
 		global $themeTitle;
-		$options = array('classname' => 'mjr_twitter_widget', 'description' => __( 'Twitter Widget plugin for Major Themes', 'mjr') );
+		$options = array('classname' => 'mjr_twitter_widget', 'description' => esc_html__( 'Twitter Widget plugin for Major Themes', 'mjr') );
 		$controls = array('width' => 250, 'height' => 200);
-		parent::__construct('mjr_twitter', __('MJR Twitter Widget', 'mjr'), $options, $controls);
+		parent::__construct('mjr_twitter', esc_html__('MJR Twitter Widget', 'mjr'), $options, $controls);
 	}
 
 	function widget($args, $instance) {
@@ -43,7 +43,7 @@ class mjr_twitter_widget extends WP_Widget {
 
 	function form($instance) {
 
-		$title = isset($instance['title']) ? esc_attr($instance['title']) : __("Recent Tweets", "mjr");
+		$title = isset($instance['title']) ? esc_attr($instance['title']) : esc_html__("Recent Tweets", "mjr");
 		$name = isset($instance['name']) ? esc_attr($instance['name']) : 'twitter';
 
 		if ( !isset($instance['number']) || !$number = (int) $instance['number'] ) {
@@ -53,12 +53,12 @@ class mjr_twitter_widget extends WP_Widget {
 		?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'mjr'); ?></label>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'mjr'); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('name'); ?>"><?php _e('Twitter name:', 'mjr'); ?></label>
+			<label for="<?php echo $this->get_field_id('name'); ?>"><?php esc_html_e('Twitter name:', 'mjr'); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id('name'); ?>" name="<?php echo $this->get_field_name('name'); ?>" type="text" value="<?php echo $name; ?>" />
 		</p>
 		
@@ -78,7 +78,7 @@ class mjr_social_images_widget extends WP_Widget {
 		'classname'	=>	'mjr_social_images_widget',
 		'description' =>	'All-In-One: Dribbble, Flickr, Pinterest and Instagram widget for mjr Themes. Just drag another widget to sidebar for a new social network.'
 		);
-		parent::__construct('mjr_social_images_widget', 'MJR All-In-One Widget', $widget_options);
+		parent::__construct('mjr_social_images_widget', esc_html__('MJR All-In-One Widget', 'mjr'), $widget_options);
 	}
 	
 
@@ -220,6 +220,32 @@ function mjr_button( $atts, $content = null) {
 	return $returned_button;
 }
 add_shortcode( 'button', 'mjr_button' );
+
+// Profile
+
+function mjr_profile( $atts, $content = null) {
+	extract( shortcode_atts( array(
+		'name' => '',
+		'bg' => '',
+		'avatar' => '',
+		'location' => '',
+		'text' => ''
+	), $atts ) );
+
+	$returned_button = '';
+	$returned_button .= "<div class='mjr-profile'>";
+	$returned_button .= "<div class='profile-bg' style='background-image: url(".$bg.")'></div>";
+	$returned_button .= "<div class='profile-avatar' style='background-image: url(".$avatar.")'></div>";
+	$returned_button .= "<div class='profile-name'>".$name."</div>";
+	if(!empty($loaction)) {
+		$returned_button .= "<div class='profile-location'><i class='fa fa-map-marker'></i> ".$location."</div>";
+	}
+	$returned_button .= "<div class='profile-text'>".$content."</div>";
+	$returned_button .= "</div>";
+
+	return $returned_button;
+}
+add_shortcode( 'profile', 'mjr_profile' );
 
 // Notice
 
