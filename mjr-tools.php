@@ -69,7 +69,6 @@ class mjr_twitter_widget extends WP_Widget {
 
 		<?php
 	}
-
 }
 
 class mjr_social_images_widget extends WP_Widget {
@@ -158,9 +157,9 @@ class mjr_social_images_widget extends WP_Widget {
 		</p>
 		<?php 
 	}
-	
 }
 
+/* Shortcodes */
 
 function mjr_slideshow( $atts, $content = null) {
 	global $post;
@@ -246,6 +245,37 @@ function mjr_profile( $atts, $content = null) {
 	return $returned_button;
 }
 add_shortcode( 'profile', 'mjr_profile' );
+
+// Profile
+
+function mjr_linkbox( $atts, $content = null) {
+	extract( shortcode_atts( array(
+		'cat' => '',
+		'link' => '',
+		'bg' => ''
+	), $atts ) );
+
+	$returned_button = '';
+	if(!empty($bg)) {
+		$returned_button .= "<div class='mjr-linkbox' style='background-image: url(".$bg.")'>";
+	} else {
+		$returned_button .= "<div class='mjr-linkbox no-bg'>";
+	}
+	if(!empty($link)) {
+		$returned_button .= "<a href='".$link."'>";
+	}
+	if(!empty($cat)) {
+		$returned_button .= "<div class='linkbox-cat'>".$cat."</div>";
+	}
+	$returned_button .= "<div class='linkbox-text'>".$content."</div>";
+	if(!empty($link)) {
+		$returned_button .= "</a>";
+	}
+	$returned_button .= "</div>";
+
+	return $returned_button;
+}
+add_shortcode( 'linkbox', 'mjr_linkbox' );
 
 // Notice
 
