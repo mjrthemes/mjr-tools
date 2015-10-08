@@ -3,7 +3,7 @@
 Plugin Name: MJR Tools
 Plugin URI: http://www.major-themes.com/
 Description: Tools include Instagram, Twitter and other social network widgets, shortcodes and other useful WordPress stuff
-Version: 1.0.5
+Version: 1.0.6
 Author: Major Themes
 Author URI: http://www.major-themes.com/
 */
@@ -177,7 +177,7 @@ function mjr_slideshow( $atts, $content = null) {
 	$i = 0;
 	foreach($images as $image) {
 		$i++;
-		$attimg = wp_get_attachment_image_src($image, 'main');
+		$attimg = wp_get_attachment_image_src($image, 'mjr-main');
 		$attdata = get_post($image);
 		$mjr_gallery .= "<li style='background-image: url(".$attimg[0].");' title='".$attdata->post_title."' ><h3>".$attdata->post_title."</h3>";
 		$mjr_gallery .= "</li>";
@@ -188,7 +188,7 @@ function mjr_slideshow( $atts, $content = null) {
 }
 add_shortcode( 'slideshow', 'mjr_slideshow' );
 
-// Button
+/* Button */
 
 function mjr_button( $atts, $content = null) {
 	extract( shortcode_atts( array(
@@ -220,7 +220,7 @@ function mjr_button( $atts, $content = null) {
 }
 add_shortcode( 'button', 'mjr_button' );
 
-// Profile
+/* Profile */
 
 function mjr_profile( $atts, $content = null) {
 	extract( shortcode_atts( array(
@@ -246,7 +246,7 @@ function mjr_profile( $atts, $content = null) {
 }
 add_shortcode( 'profile', 'mjr_profile' );
 
-// Profile
+/* Linkbox */
 
 function mjr_linkbox( $atts, $content = null) {
 	extract( shortcode_atts( array(
@@ -277,7 +277,7 @@ function mjr_linkbox( $atts, $content = null) {
 }
 add_shortcode( 'linkbox', 'mjr_linkbox' );
 
-// Notice
+/* Notice */
 
 function mjr_notice( $atts, $content = null) {
 	extract( shortcode_atts( array(
