@@ -2,164 +2,17 @@
 /*
 Plugin Name: MJR Tools
 Plugin URI: http://www.major-themes.com/
-Description: Tools include Instagram, Twitter and other social network widgets, shortcodes and other useful WordPress stuff
-Version: 1.0.6
+Description: MJR Tools
+Version: 1.0.8
 Author: Major Themes
 Author URI: http://www.major-themes.com/
 */
 
 $mjr_plugin_directory = plugin_dir_url( __FILE__ );
 
-class mjr_twitter_widget extends WP_Widget {
-
-	function mjr_twitter_widget() {
-		global $themeTitle;
-		$options = array('classname' => 'mjr_twitter_widget', 'description' => esc_html__( 'Twitter Widget plugin for Major Themes', 'mjr') );
-		$controls = array('width' => 250, 'height' => 200);
-		parent::__construct('mjr_twitter', esc_html__('MJR Twitter Widget', 'mjr'), $options, $controls);
-	}
-
-	function widget($args, $instance) {
-		global $wpdb, $shortname;
-		extract ( $args, EXTR_SKIP );
-		if (!isset($instance['title'])) $instance['title'] = "";
-		if (!isset($instance['name'])) $instance['name'] = "";
-		if (!isset($instance['number'])) $instance['number'] = "";
-		$title = apply_filters('widget_title', $instance['title']);
-		?>
-		<li class='widget twitter-widget' data-twittertitle='<?php echo $instance['name']; ?>' data-widgettitle='<?php echo $instance['title']; ?>' data-twitternumber='<?php echo $instance['number'] ?>'></li>
-		<?php
-	}
-
-	function update($new_instance, $old_instance) {
-
-		$instance = $old_instance;
-		$instance['title'] = strip_tags($new_instance['title']);
-		$instance['name'] = strip_tags($new_instance['name']);
-		$instance['number'] = (int) $new_instance['number'];
-		return $instance;
-
-	}
-
-	function form($instance) {
-
-		$title = isset($instance['title']) ? esc_attr($instance['title']) : esc_html__("Recent Tweets", "mjr");
-		$name = isset($instance['name']) ? esc_attr($instance['name']) : 'twitter';
-
-		if ( !isset($instance['number']) || !$number = (int) $instance['number'] ) {
-			$number = 1;
-		}
-
-		?>
-
-		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title:', 'mjr'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-		</p>
-
-		<p>
-			<label for="<?php echo $this->get_field_id('name'); ?>"><?php esc_html_e('Twitter name:', 'mjr'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('name'); ?>" name="<?php echo $this->get_field_name('name'); ?>" type="text" value="<?php echo $name; ?>" />
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id('number'); ?>">Tweets:</label>
-			<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="number" min="1" max="20" value="<?php echo $number; ?>" />
-		</p>
-
-		<?php
-	}
-}
-
-class mjr_social_images_widget extends WP_Widget {
-	function mjr_social_images_widget() {
-		$widget_options = array(
-		'classname'	=>	'mjr_social_images_widget',
-		'description' =>	'All-In-One: Dribbble, Flickr, Pinterest and Instagram widget for mjr Themes. Just drag another widget to sidebar for a new social network.'
-		);
-		parent::__construct('mjr_social_images_widget', esc_html__('MJR All-In-One Widget', 'mjr'), $widget_options);
-	}
-	
-
-	function widget( $args, $instance ) {
-		extract ( $args, EXTR_SKIP );
-		if (!isset($instance['title'])) $instance['title'] = "";
-		if (!isset($instance['social_network'])) $instance['social_network'] = "";
-		if (!isset($instance['user'])) $instance['user'] = "";
-		if (!isset($instance['limit'])) $instance['limit'] = "";
-		
-		$title = ( $instance['title'] ) ? $instance['title'] : '';
-		$user = ( $instance['user'] ) ? $instance['user'] : 'kaverzniy';
-		$social_network = ( $instance['social_network'] ) ? $instance['social_network'] : 'instagram'; 
-		$limit = ( $instance['limit'] ) ? $instance['limit'] : '9';
-		echo '<li class="widget social_images_widget '.$social_network.'">';
-		echo '<h2>'.$title.'</h2>';
-		
-		$unique_id =  $user . $social_network . $limit;
-		$unique_id = preg_replace("/[^A-Za-z0-9]/", '', $unique_id);
-		
-		echo '<div class="social_images_widget_content" id="' . $unique_id  .'" data-user="' . $user . '" data-limit="' . $limit . '" data-network="' . $social_network . '"></div>';
-		echo  '</li>';
-	}
-			
-	function form( $instance ) {
-		
-		if (!isset($instance['title'])) $instance['title'] = "Photostream";  
-		if (!isset($instance['user'])) $instance['user'] = "username";  
-		if (!isset($instance['limit'])) $instance['limit'] = "9";  
-		if (!isset($instance['social_network'])) $instance['social_network'] = "instagram";
-		 
-		?>
-
-		<p>
-		<label for="<?php echo $this->get_field_id('title'); ?>">
-		Title: 
-		<input id="<?php echo $this->get_field_id('title'); ?>"
-				name="<?php echo $this->get_field_name('title'); ?>"
-				value="<?php echo esc_attr( $instance['title'] ); ?>" 
-				class="widefat" type="text"/>
-		</label>
-		</p>
-
-		<p>
-		<label for="<?php echo $this->get_field_id('user'); ?>">
-		Photostream user: 
-		<input id="<?php echo $this->get_field_id('user'); ?>"
-				name="<?php echo $this->get_field_name('user'); ?>"
-				value="<?php echo esc_attr( $instance['user'] ); ?>" 
-				class="widefat" type="text"/>
-		</label>
-		</p>
-	
-		<p>
-		<label for="<?php echo $this->get_field_id('limit'); ?>">
-		No of pics displayed: 
-		<input id="<?php echo $this->get_field_id('limit'); ?>"
-				name="<?php echo $this->get_field_name('limit'); ?>"
-				value="<?php echo esc_attr( $instance['limit'] ); ?>" 
-				class="" size="1"/>
-		</label>
-		</p>
-
-		<p>
-		<label for="<?php echo $this->get_field_id('social_network'); ?>">
-		Social Network
-		
-		<select name="<?php echo $this->get_field_name('social_network'); ?>" 
-				  id="<?php echo $this->get_field_id('social_network'); ?>"
-				  class="">
-			<option value="dribbble" <?php if ($instance['social_network'] == "dribbble") echo 'selected="selected"' ?>>Dribbble</option>
-			<option value="pinterest" <?php if ($instance['social_network'] == "pinterest") echo 'selected="selected"' ?>>Pinterest</option>
-			<option value="flickr" <?php if ($instance['social_network'] == "flickr") echo 'selected="selected"' ?>>Flickr</option>
-			<option value="instagram" <?php if ($instance['social_network'] == "instagram") echo 'selected="selected"' ?>>Instagram</option>
-		</select>
-		</label>
-		</p>
-		<?php 
-	}
-}
-
 /* Shortcodes */
+
+/* Slideshow */
 
 function mjr_slideshow( $atts, $content = null) {
 	global $post;
@@ -331,9 +184,10 @@ add_shortcode( 'spoiler', 'mjr_spoiler' );
 
 function mjr_icon( $atts, $content = null) {
 	extract( shortcode_atts( array(
-					'name'  => 'wrench'
+					'name'  => 'wrench',
+					'size'  => 'inherit'
 				), $atts ) );
-	return '<i class="fa fa-'.$name.'">'.$content.'</i>';
+	return '<i class="fa fa-'.$name.'" style="font-size: '.$size.'">'.$content.'</i>';
 }
 add_shortcode( 'icon', 'mjr_icon' );
 
@@ -383,22 +237,6 @@ function one_fourth_last( $atts, $content = null ) {
 	return '<div class="one-fourth last">' . do_shortcode($content) . '</div>';
 }
 add_shortcode('one_fourth_last', 'one_fourth_last');
-
-// Divider
-
-function mjr_divider($atts, $content = null) {
-	extract(shortcode_atts(array("top" => "40", "bottom" => "40"), $atts));
-	return '<div class="divider" style="margin-top: '.$top.'px; margin-bottom: '.$bottom.'px"></div><div class="clear"></div>';
-}
-add_shortcode('divider', 'mjr_divider');
-
-// Dropcaps
-
-function mjr_dropcaps($atts, $content = null) {
-	extract(shortcode_atts(array("style" => "one"), $atts));
-	return '<span class="mjr-dropcaps-'.$style.'">' . mjr_no_wpautop($content) . '</span>';
-}
-add_shortcode('dropcaps', 'mjr_dropcaps');
 
 // Toggle 
 
@@ -472,23 +310,14 @@ function mjr_add_mce_button($buttons) {
 
 function mjr_add_mce_plugin($plugin_array) {
 	global $mjr_plugin_directory;
-	$plugin_array['blist'] = $mjr_plugin_directory.'/js/customcodes.js';
+	$plugin_array['blist'] = $mjr_plugin_directory.'js/customcodes.js';
 	return $plugin_array;
 }
-
-// Enable widgets
-
-add_action( 'widgets_init', 'mjr_ready_widgets' );
-function mjr_ready_widgets() {
-	register_widget( 'mjr_twitter_widget' );
-	register_widget( 'mjr_social_images_widget' );
-}
-
 
 add_action( 'wp_enqueue_scripts', 'mjr_plugin_script_enqueuer' );
 function mjr_plugin_script_enqueuer() {
 	global $mjr_plugin_directory;
-	wp_register_script( 'mjr_plugin_main', $mjr_plugin_directory.'/js/main.js', array( 'jquery', 'jqueryui' ), '1.0.0', true );
+	wp_register_script( 'mjr_plugin_main', $mjr_plugin_directory.'js/main.js', array( 'jquery', 'jqueryui' ), '1.0.0', true );
 	wp_enqueue_script( 'mjr_plugin_main' );
 }
 
@@ -498,9 +327,9 @@ function mjr_plugin_script_enqueuer() {
 add_action('admin_print_styles', 'mjr_admin_styles'); 
 function mjr_admin_styles() {
 	global $mjr_plugin_directory;
-	wp_register_style( 'mjr_admin_styles', $mjr_plugin_directory."/css/admin.css");
+	wp_register_style( 'mjr_admin_styles', $mjr_plugin_directory."css/admin.css");
 	wp_enqueue_style( 'mjr_admin_styles' );
-	wp_register_style( 'font-awesome', $mjr_plugin_directory."/css/font-awesome.min.css");
+	wp_register_style( 'font-awesome', $mjr_plugin_directory."css/font-awesome.min.css");
 	wp_enqueue_style( 'font-awesome' );
 }
 
@@ -509,7 +338,7 @@ function mjr_admin_styles() {
 add_action( 'admin_enqueue_scripts', 'mjr_admin_scripts' );
 function mjr_admin_scripts() {
 	global $mjr_plugin_directory;
-	wp_register_script( 'mjr_admin_scripts', $mjr_plugin_directory.'/js/admin.js', false, '1.0.0' );
+	wp_register_script( 'mjr_admin_scripts', $mjr_plugin_directory.'js/admin.js', false, '1.0.0' );
 	wp_enqueue_script( 'mjr_admin_scripts' );
 }
 
